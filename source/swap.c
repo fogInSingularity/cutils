@@ -9,13 +9,13 @@ extern "C" {
 #include <memory.h>
 #include <assert.h>
 
-void Swapuint8_ts(void* a, void* b, size_t size) {
+void SwapBytes(void* a, void* b, size_t size) {
     assert(a != NULL);
     assert(b != NULL);
 
     if (a == b) { return; }
 
-    size_t nFullOps = size >> 3; // колво шагов по 8
+    int64_t nFullOps = (int64_t)(size >> 3); // колво шагов по 8
     size_t trailer = size & 0b111UL; // оставшиеся 7 байт
 
     uint8_t* aMove = (uint8_t*)a;

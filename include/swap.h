@@ -1,4 +1,5 @@
 #ifndef SWAP_H_
+#define SWAP_H_
 
 #if defined (__cplusplus)
 extern "C" {
@@ -6,7 +7,7 @@ extern "C" {
 
 #include <stddef.h>
 
-void Swapuint8_ts(void* a, void* b, size_t size);
+void SwapBytes(void* a, void* b, size_t size);
 
 #if defined (__cplusplus)
 }
