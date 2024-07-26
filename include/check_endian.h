@@ -11,13 +11,15 @@ typedef enum EndianOrder {
     kLittleEndian = 2,
 } EndianOrder;
 
-EndianOrder CheckEndianOrder();
-
+__attribute__((unused))
 static const char* kUnknownOrderStr = "unknown order";
+__attribute__((unused))
 static const char* kBigEndianStr    = "big endian";
+__attribute__((unused))
 static const char* kLittleEndianStr = "little endian";
 
-const char* CheckEndianOrderStr();
+EndianOrder CheckEndianOrder(void);
+const char* CheckEndianOrderStr(void);
 
 #if defined (__cplusplus)
 }

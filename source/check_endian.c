@@ -4,7 +4,7 @@
 extern "C" {
 #endif // __cplusplus
 
-EndianOrder CheckEndianOrder() {
+EndianOrder CheckEndianOrder(void) {
     #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
         return kLittleEndian;
     #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
@@ -14,7 +14,7 @@ EndianOrder CheckEndianOrder() {
     #endif // __BYTE_ORDER__
 }
 
-const char* CheckEndianOrderStr() {
+const char* CheckEndianOrderStr(void) {
     #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
         return kLittleEndianStr;
     #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__

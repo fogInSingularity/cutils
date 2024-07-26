@@ -18,7 +18,7 @@ extern "C" {
 #endif // STRINGIFY
 
 #if defined (DEBUG_PRINT)
-    #define PRINT_uint8_t(n)    (void)fprintf(stderr, BOLD GREEN "[%s:%d, type: uint8_t] %s %x\n" RESET, __FILE__, __LINE__, #n, n);
+    #define PRINT_uint8_t(n) (void)fprintf(stderr, BOLD GREEN "[%s:%d, type: uint8_t] %s %x\n" RESET, __FILE__, __LINE__, #n, n);
     #define PRINT_INT(n)     (void)fprintf(stderr, BOLD GREEN "[%s:%d, type: int] %s %d\n" RESET, __FILE__, __LINE__, #n, n);
     #define PRINT_UINT(n)    (void)fprintf(stderr, BOLD GREEN "[%s:%d, type: uint] %s %u\n" RESET, __FILE__, __LINE__, #n, n);
     #define PRINT_LONG(n)    (void)fprintf(stderr, BOLD GREEN "[%s:%d, type: long] %s %ld\n" RESET, __FILE__, __LINE__, #n, n);
@@ -64,25 +64,27 @@ extern "C" {
     #define $$(...) { __VA_ARGS__; }
 #endif // DOUBLE_DOLLAR_ON
 
-// #ifdef TRIPLE_DOLLAR_ON
-// #define $$$       (void)fprintf(stderr,                                       \
-//                                 BOLD BLUE "{ %s }{ %d }{ %s }\n" RESET,     \
-//                                 __PRETTY_FUNCTION__,                          \
-//                                 __LINE__,                                     \
-//                                 __FILE__);
-// #else
-// #define $$$ ;
-// #endif // TRIPLE_DOLLAR_ON
+/*
+#ifdef TRIPLE_DOLLAR_ON
+#define $$$       (void)fprintf(stderr,                                       \
+                                BOLD BLUE "{ %s }{ %d }{ %s }\n" RESET,     \
+                                __PRETTY_FUNCTION__,                          \
+                                __LINE__,                                     \
+                                __FILE__);
+#else
+#define $$$ ;
+#endif // TRIPLE_DOLLAR_ON
 
-// #if defined (QUAD_DOLLAR_ON)
-// #define $$$$       (void)fprintf(stderr,                                       \
-//                                 BOLD RED "{ %s }{ %d }{ %s }\n" RESET,     \
-//                                 __PRETTY_FUNCTION__,                          \
-//                                 __LINE__,                                     \
-//                                 __FILE__);
-// #else
-// #define $$$$ ;
-// #endif // QUAD_DOLLAR_ON
+#if defined (QUAD_DOLLAR_ON)
+#define $$$$       (void)fprintf(stderr,                                       \
+                                BOLD RED "{ %s }{ %d }{ %s }\n" RESET,     \
+                                __PRETTY_FUNCTION__,                          \
+                                __LINE__,                                     \
+                                __FILE__);
+#else
+#define $$$$ ;
+#endif // QUAD_DOLLAR_ON
+*/
 
 #if defined (__cplusplus)
 }
