@@ -1,6 +1,4 @@
 #include "logging.h"
-#include <cstddef>
-#include <time.h>
 
 #if defined (__cplusplus)
 extern "C" {
