@@ -1,4 +1,5 @@
 #include "logging.h"
+#include <cstddef>
 #include <time.h>
 
 #if defined (__cplusplus)
@@ -15,7 +16,6 @@ extern "C" {
 // static ---------------------------------------------------------------------
 
 static FILE* log_file = NULL;
-static bool is_logging_init = false;
 
 static void LoggingDtor(void);
 
@@ -28,33 +28,46 @@ LoggingStatus LoggingSetup(const char *log_file_name) {
     FILE* try_open_log_file = fopen(log_file_name, "w");
     if (try_open_log_file == NULL) { return kLoggingStatus_CantOpenFile; }
 
-    int set_buf_res = setvbuf(try_open_log_file, NULL, _IONBF, 0);
-    if (set_buf_res != 0) { assert(0 && "cant turn unbuffered io"); }
+    int set_buf_status = setvbuf(try_open_log_file, NULL, _IONBF, 0);
+    if (!set_buf_status) { 
+        fclose(try_open_log_file);
+        return kLoggingStatus_InternalError; 
+    }
+
+    int atexit_status = atexit(LoggingDtor);
+    if (!atexit_status) {
+        fclose(try_open_log_file);
+        return kLoggingStatus_InternalError;
+    }
 
     log_file = try_open_log_file;
-    is_logging_init = true;
-
-    atexit(LoggingDtor);
 
     return kLoggingStatus_Ok;
 }
 
-void LogHidden(const char* source_file_name, 
-               const int source_line_num, 
-               const char* source_func_name, 
-               const char* format_str, 
-               ...) 
+LoggingStatus LogHidden(const char* source_file_name, 
+                        const int source_line_num, 
+                        const char* source_func_name, 
+                        const char* format_str, 
+                        ...) 
 {
 #if defined (DEBUG)
-    assert(format_str != NULL);
-    if (format_str == NULL) { return ; } // NOTE maybe return status
+    assert(format_str       != NULL);
+    assert(source_file_name != NULL);
+    assert(source_line_num  >= 0);
+    assert(source_func_name != NULL);
 
-    if (!is_logging_init) { return ; }
+    if (format_str       == NULL) { return kLoggingStatus_NullPassed; }
+    if (source_file_name == NULL) { return kLoggingStatus_NullPassed; }
+    if (source_line_num  < 0)     { return kLoggingStatus_NullPassed; }
+    if (source_func_name == NULL) { return kLoggingStatus_NullPassed; }
+
+    if (log_file == NULL) { return kLoggingStatus_UninitLog; }
         
     va_list args;
     va_start(args, format_str);
 
-    fprintf(log_file, "[%s:%s:%d]: ", source_file_name, source_func_name, source_line_num);
+    fprintf(log_file, "[%s:%s:%d]:\n", source_file_name, source_func_name, source_line_num);
     vfprintf(log_file, format_str, args);
 
     va_end(args);
@@ -64,15 +77,16 @@ void LogHidden(const char* source_file_name,
     (void)source_func_name;
     (void)format_str;
 #endif // DEBUG
+    return kLoggingStatus_Ok;
 }
 
 // static ---------------------------------------------------------------------
 
 static void LoggingDtor(void) {
-    if (!is_logging_init) { return ; }
+    if (log_file == NULL) { return ; }
 
     fclose(log_file);
-    is_logging_init = false;
+    log_file = NULL;
 }
 
 #if defined (__cplusplus)
