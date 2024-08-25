@@ -7,7 +7,8 @@ extern "C" {
 
 #include <stddef.h>
 
-void SwapBytes(void* a, void* b, size_t size);
+// return number of bytes that where swaped
+size_t SwapBytes(void* a, void* b, size_t size);
 
 #if defined (__cplusplus)
 }
