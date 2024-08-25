@@ -2,9 +2,9 @@
 
 #define SwapByte(byte_a, byte_b) \
     do {                         \
-        uint8_t tmp = byte_a;    \
-        byte_a = byte_b;         \
-        byte_b = tmp;            \
+        uint8_t tmp = (byte_a);  \
+        (byte_a) = (byte_b);     \
+        (byte_b) = tmp;          \
     } while (0)
 
 union ByteMask8 {
