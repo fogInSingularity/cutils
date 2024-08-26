@@ -11,7 +11,6 @@ extern "C" {
 void AssertStrictHidden(bool condition, const char* diagnostic_mes, 
                         const char* condition_str, const char* source_file, int source_line, const char* source_func) 
 { 
-    StaticAssert(1);
     if (condition) { return ; }
 
     Log("Strict assertion failed:\n"
