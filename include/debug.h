@@ -11,7 +11,7 @@ extern "C" {
 
 #include "color.h"
 
-#define USE_VAR(var) (void)var;
+#define USE_VAR(var) (void)var
 
 #if !defined(STRINGIFY)
     #define STRINGIFY(x) #x

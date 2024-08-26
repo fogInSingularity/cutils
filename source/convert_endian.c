@@ -1,28 +1,34 @@
-#include "convert_endian.hpp"
+#include "convert_endian.h"
 
-#define SwapByte(byte_a, byte_b) \
-    do {                         \
-        uint8_t tmp = (byte_a);  \
-        (byte_a) = (byte_b);     \
-        (byte_b) = tmp;          \
+#if defined (__cplusplus)
+extern "C" {
+#endif // __cplusplus
+
+#include <stdint.h>
+
+#define SwapByte(byte_a, byte_b)                 \
+    do {                                         \
+        uint8_t tmp = (byte_a);                  \
+                      (byte_a) = (byte_b);       \
+                                 (byte_b) = tmp; \
     } while (0)
 
-union ByteMask8 {
+typedef union ByteMask8 {
     uint64_t num;
     uint8_t  bytes[sizeof(uint64_t)];
-};
+} ByteMask8;
 
-union ByteMask4 {
+typedef union ByteMask4 {
     uint32_t num;
     uint8_t  bytes[sizeof(uint32_t)];
-};
+} ByteMask4;
 
-union ByteMask2 {
+typedef union ByteMask2 {
     uint16_t num;
     uint8_t  bytes[sizeof(uint16_t)];
-};
+} ByteMask2;
 
-uint64_t ConvertOrder(uint64_t num) {
+uint64_t ConvertOrderU64(uint64_t num) {
     ByteMask8 byte_mask;
     byte_mask.num = num;
 
@@ -34,7 +40,7 @@ uint64_t ConvertOrder(uint64_t num) {
     return byte_mask.num;
 }
 
-uint32_t ConvertOrder(uint32_t num) {
+uint32_t ConvertOrderU32(uint32_t num) {
     ByteMask4 byte_mask;
     byte_mask.num = num;
 
@@ -44,7 +50,7 @@ uint32_t ConvertOrder(uint32_t num) {
     return byte_mask.num;
 }
 
-uint16_t ConvertOrder(uint16_t num) {
+uint16_t ConvertOrderU16(uint16_t num) {
     ByteMask2 byte_mask;
     byte_mask.num = num;
     
@@ -53,6 +59,10 @@ uint16_t ConvertOrder(uint16_t num) {
     return byte_mask.num;
 }
 
-uint8_t  ConvertOrder(uint8_t  num) {
+uint8_t ConvertOrderU8(uint8_t num) {
     return num;
 }
+
+#if defined (__cplusplus)
+}
+#endif // __cplusplus

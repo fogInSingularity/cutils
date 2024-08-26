@@ -3,3 +3,5 @@ make
 build/
 .cache/
 .clangd
+obj/
+main

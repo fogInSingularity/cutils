@@ -11,6 +11,9 @@ extern "C" {
 #include <stdio.h>
 #include <assert.h>
 
+#undef fopen
+#undef fclose
+
 // static ---------------------------------------------------------------------
 
 static FILE* log_file = NULL;
@@ -49,19 +52,20 @@ LoggingStatus LogHidden(const char* source_file_name,
                         const char* format_str, 
                         ...) 
 {
-#if defined (DEBUG)
     assert(format_str       != NULL);
     assert(source_file_name != NULL);
     assert(source_line_num  >= 0);
     assert(source_func_name != NULL);
 
-    if (format_str       == NULL) { return kLoggingStatus_NullPassed; }
-    if (source_file_name == NULL) { return kLoggingStatus_NullPassed; }
-    if (source_line_num  < 0)     { return kLoggingStatus_NullPassed; }
-    if (source_func_name == NULL) { return kLoggingStatus_NullPassed; }
-
+    if ((format_str == NULL)
+        || (source_file_name == NULL)
+        || (source_func_name == NULL)
+        || (source_line_num < 0)) 
+    { return kLoggingStatus_NullPassed; }
+    
     if (log_file == NULL) { return kLoggingStatus_UninitLog; }
-        
+
+#if defined (DEBUG)    
     va_list args;
     va_start(args, format_str);
 
@@ -69,11 +73,8 @@ LoggingStatus LogHidden(const char* source_file_name,
     vfprintf(log_file, format_str, args);
 
     va_end(args);
-#else
-    (void)source_file_name;
-    (void)source_line_num;
-    (void)source_func_name;
-    (void)format_str;
+#else 
+    // do nothing    
 #endif // DEBUG
     return kLoggingStatus_Ok;
 }
