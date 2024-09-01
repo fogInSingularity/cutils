@@ -11,6 +11,8 @@ extern "C" {
 #include <stdio.h>
 #include <assert.h>
 
+#include "debug.h"
+
 #undef fopen
 #undef fclose
 
@@ -30,13 +32,13 @@ LoggingStatus LoggingSetup(const char *log_file_name) {
     if (try_open_log_file == NULL) { return kLoggingStatus_CantOpenFile; }
 
     int set_buf_status = setvbuf(try_open_log_file, NULL, _IONBF, 0);
-    if (!set_buf_status) { 
+    if (set_buf_status) {
         fclose(try_open_log_file);
         return kLoggingStatus_InternalError; 
     }
 
     int atexit_status = atexit(LoggingDtor);
-    if (!atexit_status) {
+    if (atexit_status) {
         fclose(try_open_log_file);
         return kLoggingStatus_InternalError;
     }
@@ -77,6 +79,20 @@ LoggingStatus LogHidden(const char* source_file_name,
     // do nothing    
 #endif // DEBUG
     return kLoggingStatus_Ok;
+}
+
+const char* LogErrorToStr(LoggingStatus log_status) {
+    switch (log_status) {
+        case kLoggingStatus_Ok:            return STRINGIFY(kLoggingStatus_Ok);
+
+        case kLoggingStatus_UninitEnum:    return STRINGIFY(kLoggingStatus_UninitEnum);
+        
+        case kLoggingStatus_NullPassed:    return STRINGIFY(kLoggingStatus_NullPassed);
+        case kLoggingStatus_CantOpenFile:  return STRINGIFY(kLoggingStatus_CantOpenFile);
+        case kLoggingStatus_UninitLog:     return STRINGIFY(kLoggingStatus_UninitLog);
+        case kLoggingStatus_InternalError: return STRINGIFY(kLoggingStatus_InternalError); 
+        default: assert(0 && "unknown enum value"); return "unknown enum value";
+    }
 }
 
 // static ---------------------------------------------------------------------

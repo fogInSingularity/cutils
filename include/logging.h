@@ -27,12 +27,15 @@ LoggingStatus LoggingSetup(const char* log_file_name);
 #define Log(...) LogHidden(__FILE__, __LINE__, __func__, __VA_ARGS__)
 #define LogFunctionEntry() Log("%s function entry\n", __func__)
 #define LogError(error_) Log("Error encountered: %s\n", STRINGIFY(error_))
+#define LogVariable(format_, value_) Log(#value_ ": " format_, value_)
 
 LoggingStatus LogHidden(const char* source_file_name,
                         const int source_line_num, 
                         const char* source_func_name, 
                         const char* format_str, 
                         ...) __attribute__(( format(printf, 4, 5)) );
+
+const char* LogErrorToStr(LoggingStatus log_status);
 
 #if defined (__cplusplus)
 }

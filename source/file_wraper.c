@@ -16,8 +16,8 @@ extern "C" {
 
 static int64_t file_opened = 0;
 
-FILE* FOpenWraper(const char* file_name, const char* open_mode, 
-                  const char* source_file, int source_line, const char* source_func) {
+FILE* FOpenWraperHidden(const char* file_name, const char* open_mode, 
+                        const char* source_file, int source_line, const char* source_func) {
     assert(file_name   != NULL);
     assert(open_mode   != NULL);
     assert(source_file != NULL);
@@ -43,8 +43,8 @@ FILE* FOpenWraper(const char* file_name, const char* open_mode,
     return try_open_file;
 }
 
-int FCloseWraper(FILE* file, 
-                 const char* source_file, int source_line, const char* source_func) {
+int FCloseWraperHidden(FILE* file, 
+                       const char* source_file, int source_line, const char* source_func) {
     // can file be NULL?
     assert(source_file != NULL);
     assert(source_func != NULL);

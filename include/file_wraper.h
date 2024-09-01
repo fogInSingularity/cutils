@@ -7,15 +7,15 @@ extern "C" {
 
 #include <stdio.h>
 
-#define fopen(file_name_, open_mode_) FOpenWraper(file_name_, open_mode_, __FILE__, __LINE__, __func__)
+#define FOpenWraper(file_name_, open_mode_) FOpenWraperHidden(file_name_, open_mode_, __FILE__, __LINE__, __func__)
 
-FILE* FOpenWraper(const char* file_name, const char* open_mode, 
-                  const char* source_file, int source_line, const char* source_func);
+FILE* FOpenWraperHidden(const char* file_name, const char* open_mode, 
+                        const char* source_file, int source_line, const char* source_func);
 
-#define fclose(file_) FCloseWraper(file_, __FILE__, __LINE__, __func__)
+#define FCloseWraper(file_) FCloseWraperHidden(file_, __FILE__, __LINE__, __func__)
 
-int FCloseWraper(FILE* file,
-                 const char* source_file, int source_line, const char* source_func);
+int FCloseWraperHidden(FILE* file,
+                       const char* source_file, int source_line, const char* source_func);
 
 #if defined (__cplusplus)
 }
