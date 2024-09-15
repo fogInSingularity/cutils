@@ -9,7 +9,9 @@ extern "C" {
 #include <stdbool.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <assert.h>
+#include <time.h>
 
 #include "debug.h"
 
@@ -67,12 +69,27 @@ LoggingStatus LogHidden(const char* source_file_name,
     
     if (log_file == NULL) { return kLoggingStatus_UninitLog; }
 
-#if defined (DEBUG)    
+#if defined (DEBUG)
+    time_t current_time = time(NULL);
+    if (current_time == (time_t)-1) {
+        return kLoggingStatus_InternalError;
+    }
+    
+    struct tm* current_tm = localtime(&current_time);
+
     va_list args;
     va_start(args, format_str);
 
-    fprintf(log_file, "[%s:%s:%d]:\n", source_file_name, source_func_name, source_line_num);
+    fprintf(log_file, 
+            "[%d:%d:%d][%s:%s:%d]:\n", 
+            current_tm->tm_hour, 
+            current_tm->tm_min, 
+            current_tm->tm_sec, 
+            source_file_name, 
+            source_func_name, 
+            source_line_num);
     vfprintf(log_file, format_str, args);
+    fputc('\n', log_file);
 
     va_end(args);
 #else 
@@ -99,6 +116,8 @@ const char* LogErrorToStr(LoggingStatus log_status) {
 
 static void LoggingDtor(void) {
     if (log_file == NULL) { return ; }
+
+    LogFunctionEntry();
 
     fclose(log_file);
     log_file = NULL;

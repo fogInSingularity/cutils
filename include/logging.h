@@ -11,6 +11,10 @@ extern "C" {
 #define STRINGIFY(name_) #name_
 #endif // STRINGIFY
 
+#if !defined (TO_STR)
+#define TO_STR(name_) #name_
+#endif // TO_STR
+
 typedef enum LoggingStatus {
     kLoggingStatus_Ok            = -1,
     
@@ -27,7 +31,7 @@ LoggingStatus LoggingSetup(const char* log_file_name);
 #define Log(...) LogHidden(__FILE__, __LINE__, __func__, __VA_ARGS__)
 #define LogFunctionEntry() Log("%s function entry\n", __func__)
 #define LogError(error_) Log("Error encountered: %s\n", STRINGIFY(error_))
-#define LogVariable(format_, value_) Log(#value_ ": " format_, value_)
+#define LogVariable(format_, value_) Log(#value_ ": " format_ "\n", value_)
 
 LoggingStatus LogHidden(const char* source_file_name,
                         const int source_line_num, 
