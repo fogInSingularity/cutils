@@ -81,7 +81,7 @@ LoggingStatus LogHidden(const char* source_file_name,
     va_start(args, format_str);
 
     fprintf(log_file, 
-            "[%d:%d:%d][%s:%s:%d]:\n", 
+            "[%d:%d:%d][%s:%s:%d]:\t\t", 
             current_tm->tm_hour, 
             current_tm->tm_min, 
             current_tm->tm_sec, 
@@ -89,7 +89,7 @@ LoggingStatus LogHidden(const char* source_file_name,
             source_func_name, 
             source_line_num);
     vfprintf(log_file, format_str, args);
-    fputc('\n', log_file);
+    // fputc('\n', log_file);
 
     va_end(args);
 #else 
