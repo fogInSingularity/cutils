@@ -65,7 +65,9 @@ LoggingStatus LogHidden(const char* source_file_name,
         || (source_file_name == NULL)
         || (source_func_name == NULL)
         || (source_line_num < 0)) 
-    { return kLoggingStatus_NullPassed; }
+    { 
+        return kLoggingStatus_NullPassed; 
+    }
     
     if (log_file == NULL) { return kLoggingStatus_UninitLog; }
 
@@ -80,14 +82,21 @@ LoggingStatus LogHidden(const char* source_file_name,
     va_list args;
     va_start(args, format_str);
 
-    fprintf(log_file, 
-            "[%d:%d:%d][%s:%s:%d]:\t\t", 
-            current_tm->tm_hour, 
-            current_tm->tm_min, 
-            current_tm->tm_sec, 
-            source_file_name, 
-            source_func_name, 
-            source_line_num);
+    int printed = 0;
+    printed = fprintf(log_file, 
+                      "[%d:%d:%d][%s:%s:%d]: ", 
+                      current_tm->tm_hour, 
+                      current_tm->tm_min, 
+                      current_tm->tm_sec, 
+                      source_file_name, 
+                      source_func_name, 
+                      source_line_num);
+
+    const int kAlignment = 90;
+    for (int i = printed; i < kAlignment; i++) {
+        fputc(' ', log_file);
+    }
+
     vfprintf(log_file, format_str, args);
     // fputc('\n', log_file);
 
